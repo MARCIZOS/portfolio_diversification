@@ -3,10 +3,7 @@
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "cleanUrls": true,
-  "env": {
-    "PYTHONUNBUFFERED": "1",
-    "NODE_ENV": "production"
-  },
+  "framework": "vite",
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -17,8 +14,8 @@
       "destination": "/api/index.py"
     },
     {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
+      "source": "/(.*)",
+      "destination": "/$1"
     }
   ]
 }

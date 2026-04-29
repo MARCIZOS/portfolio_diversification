@@ -1,8 +1,15 @@
+# Exclude everything from the Python function bundle except the API and logic
 node_modules
-__pycache__
+frontend/node_modules
+frontend/src
+frontend/public
+frontend/dist
 .git
 .env
 .env.local
-frontend/node_modules
-frontend/dist
 .users_db.json
+__pycache__
+*.pyc
+tests
+README.md
+DEPLOYMENT.md
