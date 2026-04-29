@@ -22,8 +22,8 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(auth_router)
-app.include_router(portfolio_router)
+app.include_router(auth_router, prefix="/api")
+app.include_router(portfolio_router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn
