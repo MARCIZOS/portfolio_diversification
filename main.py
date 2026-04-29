@@ -13,6 +13,12 @@ load_dotenv()
 app = FastAPI(title="ARAIA Portfolio Input API")
 
 
+@app.get("/")
+def root() -> dict[str, str]:
+    """Simple landing response for direct app requests."""
+    return {"status": "ok", "message": "ARAIA Portfolio Input API is running"}
+
+
 @app.get("/api")
 def api_root() -> dict[str, str]:
     """Simple health response for the API base path."""
