@@ -1,14 +1,16 @@
-# Exclude node_modules from deployment
+# Ignore all node_modules - the builders will install their own
+**/node_modules
 node_modules
-frontend/node_modules
 
-# Exclude large development artifacts
-__pycache__
-*.pyc
+# Ignore other dev stuff
 .git
-.env
-.env.local
+.env*
 .users_db.json
 tests
-README.md
+__pycache__
+*.pyc
+*.md
+local_dev.py
+run_local.py
 DEPLOYMENT.md
+runtime.txt
