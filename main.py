@@ -12,6 +12,12 @@ load_dotenv()
 
 app = FastAPI(title="ARAIA Portfolio Input API")
 
+
+@app.get("/api")
+def api_root() -> dict[str, str]:
+    """Simple health response for the API base path."""
+    return {"status": "ok"}
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
