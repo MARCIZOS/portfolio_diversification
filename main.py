@@ -14,16 +14,10 @@ load_dotenv()
 app = FastAPI(title="ARAIA Portfolio Input API")
 
 
-@app.get("/")
-def root() -> RedirectResponse:
-    """Send browser requests to the frontend entry page."""
-    return RedirectResponse(url="/index.html", status_code=307)
-
-
-@app.get("/api")
+@app.get("/api/health")
 def api_root() -> dict[str, str]:
     """Simple health response for the API base path."""
-    return {"status": "ok"}
+    return {"status": "ok", "message": "API is running"}
 
 # Add CORS middleware
 app.add_middleware(

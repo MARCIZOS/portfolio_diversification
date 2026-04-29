@@ -9,7 +9,14 @@ import bcrypt
 from typing import Optional
 
 # Lightweight JSON-backed user store for local development.
-USERS_DB_FILE = Path(os.getenv("USERS_DB_FILE", ".users_db.json"))
+# On Vercel, we use /tmp because the root filesystem is read-only.
+# NOTE: /tmp is not persistent across serverless invocations.
+# For production, use a real database (Postgres, MongoDB, etc.)
+if os.getenv("VERCEL"):
+    USERS_DB_FILE = Path("/tmp/.users_db.json")
+else:
+    USERS_DB_FILE = Path(os.getenv("USERS_DB_FILE", ".users_db.json"))
+
 USERS_DB: dict[str, dict] = {}
 
 # JWT Configuration

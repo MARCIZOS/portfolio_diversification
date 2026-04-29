@@ -2,8 +2,11 @@
   "version": 2,
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
+  "cleanUrls": true,
+  "framework": "vite",
   "env": {
-    "PYTHONUNBUFFERED": "1"
+    "PYTHONUNBUFFERED": "1",
+    "NODE_ENV": "production"
   },
   "rewrites": [
     {
