@@ -3,6 +3,7 @@
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from api.routes import router as portfolio_router
 from api.auth_routes import router as auth_router
@@ -14,9 +15,9 @@ app = FastAPI(title="ARAIA Portfolio Input API")
 
 
 @app.get("/")
-def root() -> dict[str, str]:
-    """Simple landing response for direct app requests."""
-    return {"status": "ok", "message": "ARAIA Portfolio Input API is running"}
+def root() -> RedirectResponse:
+    """Send browser requests to the frontend entry page."""
+    return RedirectResponse(url="/index.html", status_code=307)
 
 
 @app.get("/api")
