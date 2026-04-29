@@ -1,0 +1,128 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  height: 600px;
+  max-height: 90vh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--card-border);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  padding: 0.5rem;
+}
+
+.modal-layout {
+  display: flex;
+  height: 100%;
+}
+
+.modal-sidebar {
+  width: 240px;
+  background: rgba(255, 255, 255, 0.02);
+  border-right: 1px solid var(--card-border);
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  padding-left: 1rem;
+}
+
+.modal-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.modal-nav-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+}
+
+.modal-nav-item.active {
+  background: rgba(110, 231, 183, 0.1);
+  color: var(--accent-mint);
+}
+
+.modal-body {
+  flex: 1;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+}
+
+.tab-content h4 {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.billing-card {
+  padding: 1.5rem;
+  border-radius: var(--border-radius-md);
+  background: rgba(110, 231, 183, 0.05);
+  border: 1px solid rgba(110, 231, 183, 0.2);
+}
+
+.badge-active {
+  background: rgba(52, 211, 153, 0.2);
+  color: var(--accent-mint);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.text-sm {
+  font-size: 0.8rem;
+}
+
+select.form-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236ee7b7%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem top 50%;
+  background-size: 0.65rem auto;
+}

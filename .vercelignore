@@ -1,0 +1,7 @@
+node_modules
+__pycache__
+.git
+.env.local
+portfolio_diversification-main/frontend/.vite
+portfolio_diversification-main/frontend/node_modules
+portfolio_diversification-main/__pycache__
