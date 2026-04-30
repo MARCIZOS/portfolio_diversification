@@ -1,8 +1,12 @@
 import os
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+
+# Load environment variables from .env file
+load_dotenv()
 
 from api.routes import router as portfolio_router
 from api.auth_routes import router as auth_router
