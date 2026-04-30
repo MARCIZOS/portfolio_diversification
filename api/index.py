@@ -24,6 +24,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Static file serving (for Docker/AWS deployment)
+from fastapi.staticfiles import StaticFiles
+if os.path.exists("static"):
+    app.mount("/", StaticFiles(directory="static", html=True), name="static")
+
 # Health check routes
 @app.get("/api/health")
 @app.get("/api")

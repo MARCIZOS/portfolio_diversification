@@ -8,14 +8,11 @@ import jwt
 import bcrypt
 from typing import Optional
 
-# Lightweight JSON-backed user store for local development.
-# On Vercel, we use /tmp because the root filesystem is read-only.
-# NOTE: /tmp is not persistent across serverless invocations.
-# For production, use a real database (Postgres, MongoDB, etc.)
-if os.getenv("VERCEL"):
-    USERS_DB_FILE = Path("/tmp/.users_db.json")
-else:
-    USERS_DB_FILE = Path(os.getenv("USERS_DB_FILE", ".users_db.json"))
+# Persistent storage configuration
+# For AWS deployment (e.g., App Runner), /tmp is ephemeral.
+# In a real AWS production setup, you should use RDS (Postgres) or DynamoDB.
+# For now, we'll keep the JSON store but allow configuring the path via env.
+USERS_DB_FILE = Path(os.getenv("USERS_DB_FILE", ".users_db.json"))
 
 USERS_DB: dict[str, dict] = {}
 

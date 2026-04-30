@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Use relative API path in production (deployed on same domain)
+// Use relative API path in production (deployed on same domain in Docker/AWS)
 // Use localhost for development
 const API_BASE_URL = import.meta.env.PROD 
   ? '/api' 
