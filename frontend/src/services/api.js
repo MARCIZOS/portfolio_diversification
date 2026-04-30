@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-// Use relative API path in production (deployed on same domain in Docker/AWS)
-// Use localhost for development
-const API_BASE_URL = import.meta.env.PROD 
+// For S3 + CloudFront deployment, the API might be on a different domain (EC2)
+// Use environment variable for API URL, fallback to relative or localhost
+const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD 
   ? '/api' 
-  : 'http://localhost:8000/api';
+  : 'http://localhost:8000/api');
 
 const api = axios.create({
   baseURL: API_BASE_URL,

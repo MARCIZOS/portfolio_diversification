@@ -1,58 +1,74 @@
-# AWS Deployment Guide (App Runner / ECS)
+# AWS Deployment Guide (S3 + CloudFront + EC2)
 
-This project is configured for a unified deployment using Docker, which is the recommended way to deploy full-stack applications on AWS.
+This guide explains how to deploy the portfolio diversifier project using a split architecture:
+- **Frontend**: Hosted on **AWS S3** and distributed via **CloudFront**.
+- **Backend**: Hosted on an **AWS EC2** instance.
 
-## Deployment Strategy: Dockerized Full-Stack
-The application is containerized such that:
-1. **Frontend**: React is built and served as static files by the FastAPI backend.
-2. **Backend**: FastAPI handles API requests under `/api` and serves the React UI under `/`.
-3. **Container**: Everything runs in a single Docker container on port 8000.
+## 1. Backend Deployment (EC2)
 
-## Prerequisites
-1. **AWS Account**
-2. **Docker Installed** (for local testing)
-3. **AWS CLI** configured
+### Prerequisites
+- An EC2 instance (Ubuntu 22.04 recommended).
+- Security Group allowing inbound traffic on port 80 (HTTP), 443 (HTTPS), and 8000 (API).
 
-## Local Testing with Docker
-```bash
-# Build the image
-docker build -t portfolio-diversifier .
+### Steps
+1. **Connect to your EC2**:
+   ```bash
+   ssh -i your-key.pem ubuntu@your-ec2-ip
+   ```
+2. **Install Dependencies**:
+   ```bash
+   sudo apt update && sudo apt install -y python3-pip python3-venv git
+   ```
+3. **Clone and Setup**:
+   ```bash
+   git clone https://github.com/your-repo/portfolio_diversify.git
+   cd portfolio_diversify
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+4. **Environment Variables**:
+   Create a `.env` file with your keys and the allowed origins:
+   ```env
+   GROQ_API_KEY=your_key
+   ALLOWED_ORIGINS=https://your-cloudfront-domain.com
+   ```
+5. **Run with Gunicorn/Uvicorn**:
+   ```bash
+   pip install gunicorn
+   gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000 --daemon
+   ```
 
-# Run the container
-docker run -p 8000:8000 -e GROQ_API_KEY=your_key portfolio-diversifier
-```
-Access the app at `http://localhost:8000`
+## 2. Frontend Deployment (S3 + CloudFront)
 
-## Deploying to AWS App Runner (Easiest)
-AWS App Runner is a fully managed service that makes it easy to deploy containerized web applications.
+### Steps
+1. **Configure API URL**:
+   In your local `frontend/` directory, create/update `.env.production`:
+   ```env
+   VITE_API_URL=https://your-ec2-domain-or-ip/api
+   ```
+2. **Build the Frontend**:
+   ```bash
+   cd frontend
+   npm install
+   npm run build
+   ```
+3. **Upload to S3**:
+   - Create an S3 bucket (e.g., `portfolio-frontend-static`).
+   - Enable **Static Website Hosting**.
+   - Upload all files from `frontend/dist/` to the root of the bucket.
+4. **Configure CloudFront**:
+   - Create a CloudFront Distribution.
+   - **Origin**: Your S3 bucket website endpoint.
+   - **Viewer Protocol Policy**: Redirect HTTP to HTTPS.
+   - **Default Root Object**: `index.html`.
+   - **Error Pages**: Add a custom error response for 403/404 to return `/index.html` with status 200 (for SPA routing).
 
-1. **Create an ECR Repository**:
-   - Go to AWS Console -> Elastic Container Registry -> Create repository.
-   - Name it `portfolio-diversifier`.
+## 3. Architecture Benefits
+- **Cost**: S3 + CloudFront is extremely cheap for static hosting.
+- **Performance**: CloudFront caches your frontend at edge locations globally.
+- **Scalability**: Your EC2 only handles API logic and RAG processing.
 
-2. **Push your Image to ECR**:
-   Click "View push commands" in your ECR repository and follow the steps:
-   - Authenticate your Docker client.
-   - Build your Docker image.
-   - Tag the image.
-   - Push the image to ECR.
-
-3. **Create App Runner Service**:
-   - Go to AWS Console -> App Runner -> Create service.
-   - **Source**: Container registry -> Amazon ECR.
-   - **Container image URI**: Select your pushed image.
-   - **Deployment settings**: Automatic (whenever you push a new image).
-   - **Service settings**:
-     - **Port**: 8000.
-     - **Environment Variables**: Add `GROQ_API_KEY`, `SECRET_KEY`, etc.
-   - Review and Create.
-
-## Deploying to AWS ECS (Fargate)
-For more advanced scaling and networking:
-1. Create an ECS Cluster.
-2. Create a Task Definition (Container: your ECR image, Port: 8000).
-3. Create a Service to run the task in your cluster.
-
-## Important Production Notes
-- **Persistence**: The current user database (`.users_db.json`) is stored inside the container. Since containers are ephemeral, your data will be lost on restart. For production, you should update `auth_service.py` to use **AWS RDS (Postgres)** or **DynamoDB**.
-- **Security**: Always use environment variables for sensitive keys (`GROQ_API_KEY`, `SECRET_KEY`).
+## Important Notes
+- **SSL**: Use AWS Certificate Manager (ACM) to get a free SSL certificate for your CloudFront distribution.
+- **CORS**: Ensure `ALLOWED_ORIGINS` in your EC2 `.env` matches your CloudFront domain to prevent browser blocks.

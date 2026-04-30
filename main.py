@@ -11,9 +11,11 @@ from api.auth_routes import router as auth_router
 app = FastAPI(title="ARAIA Portfolio API")
 
 # Add CORS middleware
+# In S3 + CloudFront architecture, the frontend domain will be different from EC2
+# You should replace "*" with your CloudFront domain in production
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=os.getenv("ALLOWED_ORIGINS", "*").split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
