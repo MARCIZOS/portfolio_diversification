@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY api/ ./api/
 COPY models/ ./models/
 COPY services/ ./services/
-COPY run_local.py ./main.py
+COPY main.py .
 
 # Copy frontend build from Stage 1
 COPY --from=frontend-builder /app/frontend/dist ./static
@@ -32,6 +32,7 @@ COPY --from=frontend-builder /app/frontend/dist ./static
 # Environment variables
 ENV PORT=8000
 ENV PYTHONUNBUFFERED=1
+ENV DOCKER_ENV=1
 
 # Expose the port
 EXPOSE 8000
